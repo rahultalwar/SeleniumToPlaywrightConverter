@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlastConvert | Selenium to Playwright</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Prism.js for Syntax Highlighting -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="glass-bg"></div>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="icon">🚀</span>
+                <h1>Blast<span>Convert</span></h1>
+            </div>
+            <p class="subtitle">AI-Powered Selenium (Java) to Playwright (TS) Migrator</p>
+        </header>
+
+        <main class="converter-box">
+            <div class="pane-container">
+                <!-- Input Pane -->
+                <div class="pane input-pane">
+                    <div class="pane-header">
+                        <span class="badge java">Java / TestNG</span>
+                        <button id="clear-btn" class="icon-btn" title="Clear All">🗑️</button>
+                    </div>
+                    <textarea id="java-input" placeholder="Paste your Selenium Java code here..."></textarea>
+                </div>
+
+                <!-- Control Center -->
+                <div class="controls">
+                    <button id="convert-btn">
+                        <span class="btn-text">Convert Now</span>
+                        <span class="loader hidden"></span>
+                    </button>
+                    <div class="model-select">
+                        <label for="model">Model:</label>
+                        <select id="model">
+                            <option value="llama3">Llama 3</option>
+                            <option value="mistral">Mistral</option>
+                            <option value="codellama">CodeLlama</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Output Pane -->
+                <div class="pane output-pane">
+                    <div class="pane-header">
+                        <span class="badge playwright">Playwright TS</span>
+                        <div class="actions">
+                            <button id="copy-btn" class="icon-btn" title="Copy to Clipboard">📋</button>
+                            <button id="download-btn" class="icon-btn" title="Download File">💾</button>
+                        </div>
+                    </div>
+                    <div class="code-container">
+                        <pre><code id="ts-output" class="language-typescript">// Converted code will appear here...</code></pre>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="status-bar">
+            <div id="status-msg" class="idle">Ready to convert.</div>
+            <div class="version">v1.0.0 | B.L.A.S.T Protocol</div>
+        </footer>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
