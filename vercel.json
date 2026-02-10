@@ -1,26 +1,17 @@
 {
   "version": 2,
-  "functions": {
-    "api/index.py": {
-      "maxDuration": 30
-    }
-  },
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/index.py"
-    },
-    {
       "src": "/convert",
-      "dest": "/api/index.py"
+      "dest": "/api/convert.py"
     },
     {
       "src": "/models",
-      "dest": "/api/index.py"
+      "dest": "/api/models.py"
     },
     {
       "src": "/health",
-      "dest": "/api/index.py"
+      "dest": "/api/health.py"
     },
     {
       "src": "/(.*)",
