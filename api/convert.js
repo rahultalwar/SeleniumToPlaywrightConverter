@@ -1,31 +1,48 @@
-module.exports = (req, res) => {
-  // Enable CORS
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+export const config = {
+  runtime: 'edge',
+};
 
-  // Handle preflight
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
+export default async function handler(request) {
+  // Enable CORS
+  if (request.method === 'OPTIONS') {
+    return new Response(null, {
+      status: 200,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      },
+    });
   }
 
-  // Only allow POST
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (request.method !== 'POST') {
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 
   try {
-    const { java_source_code, model } = req.body;
+    const body = await request.json();
+    const java_code = body.java_source_code;
 
-    if (!java_source_code) {
-      return res.status(400).json({
-        playwright_code: '',
-        status: 'error',
-        error_message: 'No Java code provided'
-      });
+    if (!java_code) {
+      return new Response(
+        JSON.stringify({
+          playwright_code: '',
+          status: 'error',
+          error_message: 'No Java code provided',
+        }),
+        {
+          status: 400,
+          headers: {
+            'Content-Type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
+          },
+        }
+      );
     }
 
-    // Demo conversion
     const result = `import { test, expect } from '@playwright/test';
 
 test('converted test', async ({ page }) => {
@@ -38,17 +55,34 @@ test('converted test', async ({ page }) => {
 
 // NOTE: DEMO conversion. Add API key for real conversions.`;
 
-    return res.status(200).json({
-      playwright_code: result,
-      status: 'success',
-      error_message: null
-    });
+    return new Response(
+      JSON.stringify({
+        playwright_code: result,
+        status: 'success',
+        error_message: null,
+      }),
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    );
   } catch (error) {
-    console.error('Conversion error:', error);
-    return res.status(500).json({
-      playwright_code: '',
-      status: 'error',
-      error_message: error.message
-    });
+    return new Response(
+      JSON.stringify({
+        playwright_code: '',
+        status: 'error',
+        error_message: error.message,
+      }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+        },
+      }
+    );
   }
-};
+}

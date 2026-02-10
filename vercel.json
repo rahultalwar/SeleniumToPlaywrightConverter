@@ -1,51 +1,21 @@
 {
   "version": 2,
-  "functions": {
-    "api/convert.js": {
-      "maxDuration": 30
-    },
-    "api/models.js": {
-      "maxDuration": 10
-    },
-    "api/health.js": {
-      "maxDuration": 10
-    }
-  },
   "routes": [
     {
       "src": "/convert",
-      "dest": "/api/convert.js"
+      "dest": "/api/convert"
     },
     {
       "src": "/models",
-      "dest": "/api/models.js"
+      "dest": "/api/models"
     },
     {
       "src": "/health",
-      "dest": "/api/health.js"
+      "dest": "/api/health"
     },
     {
       "src": "/(.*)",
       "dest": "/public/$1"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/api/(.*)",
-      "headers": [
-        {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
-          "key": "Access-Control-Allow-Methods",
-          "value": "GET, POST, OPTIONS"
-        },
-        {
-          "key": "Access-Control-Allow-Headers",
-          "value": "Content-Type"
-        }
-      ]
     }
   ]
 }
