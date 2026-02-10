@@ -1,21 +1,21 @@
 {
   "version": 2,
-  "rewrites": [
+  "routes": [
     {
-      "source": "/convert",
-      "destination": "/api/convert"
+      "src": "/convert",
+      "dest": "/api/convert.js"
     },
     {
-      "source": "/models",
-      "destination": "/api/models"
+      "src": "/models",
+      "dest": "/api/models.js"
     },
     {
-      "source": "/health",
-      "destination": "/api/health"
+      "src": "/health",
+      "dest": "/api/health.js"
     },
     {
-      "source": "/(.*)",
-      "destination": "/public/$1"
+      "src": "/(.*)",
+      "dest": "/public/$1"
     }
   ],
   "headers": [
