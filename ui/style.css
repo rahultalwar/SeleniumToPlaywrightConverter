@@ -81,8 +81,8 @@ header {
     gap: 0.5rem;
 }
 
-.moonshot-badge {
-    background: linear-gradient(135deg, #4facfe, #00f2fe);
+.groq-badge {
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
     color: #1a1a2e;
     padding: 4px 12px;
     border-radius: 99px;
