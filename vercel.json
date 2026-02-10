@@ -6,20 +6,20 @@
   "rewrites": [
     {
       "source": "/convert",
-      "destination": "/api/convert.py"
+      "destination": "/api-nodejs/convert.js"
     },
     {
       "source": "/models",
-      "destination": "/api/models.py"
+      "destination": "/api-nodejs/models.js"
     },
     {
       "source": "/health",
-      "destination": "/api/health.py"
+      "destination": "/api-nodejs/health.js"
     }
   ],
   "headers": [
     {
-      "source": "/api/(.*)",
+      "source": "/api-nodejs/(.*)",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
