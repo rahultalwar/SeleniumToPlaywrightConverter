@@ -1,25 +1,26 @@
 {
   "version": 2,
-  "buildCommand": null,
-  "outputDirectory": "public",
-  "framework": null,
   "rewrites": [
     {
       "source": "/convert",
-      "destination": "/api-nodejs/convert.js"
+      "destination": "/api/convert"
     },
     {
       "source": "/models",
-      "destination": "/api-nodejs/models.js"
+      "destination": "/api/models"
     },
     {
       "source": "/health",
-      "destination": "/api-nodejs/health.js"
+      "destination": "/api/health"
+    },
+    {
+      "source": "/(.*)",
+      "dest": "/public/$1"
     }
   ],
   "headers": [
     {
-      "source": "/api-nodejs/(.*)",
+      "source": "/api/(.*)",
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
@@ -35,10 +36,5 @@
         }
       ]
     }
-  ],
-  "env": {
-    "K2_API_URL": "https://api.moonshot.cn/v1/chat/completions",
-    "K2_MODEL": "moonshot-v1-8k",
-    "DEMO_MODE": "true"
-  }
+  ]
 }

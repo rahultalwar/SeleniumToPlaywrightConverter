@@ -3,9 +3,11 @@
   "version": "2.1.0",
   "description": "AI-powered Selenium to Playwright converter",
   "scripts": {
-    "dev": "python3 tools/app.py",
-    "build": "echo 'Static site, no build needed'"
+    "dev": "vercel dev"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {},
+  "engines": {
+    "node": "18.x"
+  }
 }
