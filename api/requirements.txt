@@ -1,6 +1,0 @@
-# Python dependencies for Vercel serverless functions
-# These are pre-installed on Vercel, but listed here for clarity
-
-# No external dependencies needed for demo mode
-# If using real AI API, add:
-# requests>=2.31.0
