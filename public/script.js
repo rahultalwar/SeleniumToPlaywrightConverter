@@ -9,10 +9,12 @@ const clearBtn = document.getElementById('clear-btn');
 const modelDropdown = document.getElementById('model-dropdown');
 const statusMsg = document.getElementById('status-msg');
 
-// API Configuration - Vercel serverless functions
-const API_URL = '/convert';
-const MODELS_URL = '/models';
-const HEALTH_URL = '/health';
+// API Configuration - works for both local and Vercel
+// Use window.location to automatically detect the base URL
+const BASE_URL = '';
+const API_URL = `${BASE_URL}/convert`;
+const MODELS_URL = `${BASE_URL}/models`;
+const HEALTH_URL = `${BASE_URL}/health`;
 
 // Model display names with descriptions
 const MODEL_INFO = {
@@ -24,8 +26,22 @@ const MODEL_INFO = {
 // Fetch available models from server and update dropdown
 async function fetchModels() {
     try {
-        const response = await fetch(MODELS_URL);
+        console.log('Fetching models from:', MODELS_URL);
+        const response = await fetch(MODELS_URL, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        console.log('Models response status:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
+        
         const data = await response.json();
+        console.log('Models data:', data);
         
         if (data.models && data.models.length > 0) {
             // Clear existing options
@@ -49,6 +65,7 @@ async function fetchModels() {
     } catch (err) {
         console.error('Error fetching models:', err);
         // Keep default options if fetch fails
+        updateStatus('Using default models (API unavailable)', 'error');
     }
 }
 
@@ -65,12 +82,18 @@ async function performConversion() {
     setLoading(true);
     const selectedModel = modelDropdown.value;
     const modelInfo = MODEL_INFO[selectedModel] || { name: selectedModel };
-    updateStatus(`Connecting to Moonshot AI (${modelInfo.name})...`, 'idle');
+    updateStatus(`Converting with ${modelInfo.name}...`, 'idle');
 
     try {
+        console.log('Sending conversion request to:', API_URL);
+        console.log('Model:', selectedModel);
+        
         const response = await fetch(API_URL, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
             body: JSON.stringify({
                 java_source_code: javaCode,
                 target_flavor: 'typescript',
@@ -78,7 +101,18 @@ async function performConversion() {
             })
         });
 
-        const data = await response.json();
+        console.log('Convert response status:', response.status);
+        
+        let data;
+        const responseText = await response.text();
+        console.log('Raw response:', responseText);
+        
+        try {
+            data = JSON.parse(responseText);
+        } catch (e) {
+            console.error('Failed to parse JSON:', e);
+            throw new Error('Invalid response from server');
+        }
 
         if (data.status === 'success') {
             tsOutput.textContent = data.playwright_code;
@@ -86,11 +120,12 @@ async function performConversion() {
             updateStatus('Conversion successful!', 'success');
         } else {
             updateStatus(data.error_message || 'Conversion failed.', 'error');
-            tsOutput.textContent = `// Error:\n${data.error_message}`;
+            tsOutput.textContent = `// Error:\n${data.error_message || 'Unknown error'}`;
         }
     } catch (err) {
         console.error('API Error:', err);
-        updateStatus('Network error or server offline.', 'error');
+        updateStatus(`Network error: ${err.message}. Server may be offline.`, 'error');
+        tsOutput.textContent = `// Error: ${err.message}\n// Please check that the server is running.`;
     } finally {
         setLoading(false);
     }
@@ -155,3 +190,18 @@ document.addEventListener('keydown', (e) => {
         performConversion();
     }
 });
+
+// Health check on load
+async function checkHealth() {
+    try {
+        const response = await fetch(HEALTH_URL);
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Health check:', data);
+        }
+    } catch (err) {
+        console.warn('Health check failed:', err);
+    }
+}
+
+checkHealth();

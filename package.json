@@ -1,0 +1,11 @@
+{
+  "name": "blastconvert",
+  "version": "2.1.0",
+  "description": "AI-powered Selenium to Playwright converter",
+  "scripts": {
+    "dev": "python3 tools/app.py",
+    "build": "echo 'Static site, no build needed'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

@@ -1,21 +1,39 @@
 {
   "version": 2,
-  "routes": [
+  "buildCommand": null,
+  "outputDirectory": "public",
+  "framework": null,
+  "rewrites": [
     {
-      "src": "/convert",
-      "dest": "/api/convert.py"
+      "source": "/convert",
+      "destination": "/api/convert.py"
     },
     {
-      "src": "/models",
-      "dest": "/api/models.py"
+      "source": "/models",
+      "destination": "/api/models.py"
     },
     {
-      "src": "/health",
-      "dest": "/api/health.py"
-    },
+      "source": "/health",
+      "destination": "/api/health.py"
+    }
+  ],
+  "headers": [
     {
-      "src": "/(.*)",
-      "dest": "/public/$1"
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type"
+        }
+      ]
     }
   ],
   "env": {
