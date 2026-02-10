@@ -9,9 +9,10 @@ const clearBtn = document.getElementById('clear-btn');
 const modelDropdown = document.getElementById('model-dropdown');
 const statusMsg = document.getElementById('status-msg');
 
-// API Configuration
+// API Configuration - Vercel serverless functions
 const API_URL = '/convert';
 const MODELS_URL = '/models';
+const HEALTH_URL = '/health';
 
 // Model display names with descriptions
 const MODEL_INFO = {

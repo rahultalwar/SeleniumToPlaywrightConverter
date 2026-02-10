@@ -7,9 +7,9 @@ from pydantic import BaseModel
 import uvicorn
 import os
 try:
-    from tools.converter import convert_code
+    from tools.converter import convert_code, K2_MODEL
 except ImportError:
-    from converter import convert_code
+    from converter import convert_code, K2_MODEL
 
 
 app = FastAPI(title="Selenium to Playwright Converter")
@@ -26,24 +26,24 @@ app.add_middleware(
 class ConvertRequest(BaseModel):
     java_source_code: str
     target_flavor: str = "typescript"
-    model: str = "llama3"
+    model: str = None  # Optional, uses K2_MODEL by default
 
 class ConvertResponse(BaseModel):
     playwright_code: str
     status: str
     error_message: str = None
 
+# Available Moonshot models
+AVAILABLE_MODELS = [
+    "moonshot-v1-8k",
+    "moonshot-v1-32k", 
+    "moonshot-v1-128k"
+]
+
 @app.get("/models")
 async def get_models():
-    try:
-        response = requests.get("http://localhost:11434/api/tags")
-        response.raise_for_status()
-        data = response.json()
-        models = [m["name"] for m in data.get("models", [])]
-        return {"models": models}
-    except Exception as e:
-        # Fallback if Ollama is down or error
-        return {"models": ["llama3", "mistral", "codellama"], "error": str(e)}
+    """Returns available Moonshot models."""
+    return {"models": AVAILABLE_MODELS, "default": K2_MODEL}
 
 @app.post("/convert", response_model=ConvertResponse)
 async def convert(request: ConvertRequest):

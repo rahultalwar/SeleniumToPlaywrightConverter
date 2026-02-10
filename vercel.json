@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "functions": {
+    "api/index.py": {
+      "maxDuration": 30
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/convert",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/models",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/health",
+      "dest": "/api/index.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
+  ],
+  "env": {
+    "K2_API_URL": "https://api.moonshot.cn/v1/chat/completions",
+    "K2_MODEL": "moonshot-v1-8k",
+    "DEMO_MODE": "true"
+  }
+}
