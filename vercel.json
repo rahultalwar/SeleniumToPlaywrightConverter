@@ -1,5 +1,16 @@
 {
   "version": 2,
+  "functions": {
+    "api/convert.js": {
+      "maxDuration": 30
+    },
+    "api/models.js": {
+      "maxDuration": 10
+    },
+    "api/health.js": {
+      "maxDuration": 10
+    }
+  },
   "routes": [
     {
       "src": "/convert",
