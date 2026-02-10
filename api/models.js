@@ -23,8 +23,8 @@ export default function handler(request) {
 
   return new Response(
     JSON.stringify({
-      models: ['moonshot-v1-8k', 'moonshot-v1-32k', 'moonshot-v1-128k'],
-      default: 'moonshot-v1-8k',
+      models: ['llama-3.1-8b-instant', 'llama-3.3-70b-versatile', 'mixtral-8x7b-32768'],
+      default: 'llama-3.1-8b-instant',
     }),
     {
       status: 200,
