@@ -17,9 +17,9 @@ const HEALTH_URL = `${BASE_URL}/health`;
 
 // Model display names with descriptions
 const MODEL_INFO = {
-    'moonshot-v1-8k': { name: 'Moonshot v1 (8K)', context: '8K context' },
-    'moonshot-v1-32k': { name: 'Moonshot v1 (32K)', context: '32K context' },
-    'moonshot-v1-128k': { name: 'Moonshot v1 (128K)', context: '128K context' }
+    'llama-3.1-8b-instant': { name: 'Llama 3.1 8B', context: 'Fast & efficient' },
+    'llama-3.3-70b-versatile': { name: 'Llama 3.3 70B', context: 'Most capable' },
+    'mixtral-8x7b-32768': { name: 'Mixtral 8x7B', context: '32K context' }
 };
 
 // Fetch with timeout and retry
