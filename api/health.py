@@ -1,23 +1,32 @@
 import json
-from http.server import BaseHTTPRequestHandler
 
-class handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        self.send_response(200)
-        self.send_header('Content-Type', 'application/json')
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.end_headers()
-        
-        response = {
+def Handler(request):
+    """Vercel Python Serverless Function Handler"""
+    headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type'
+    }
+    
+    # Handle OPTIONS (CORS preflight)
+    if request.get('method') == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({'message': 'OK'})
+        }
+    
+    # Handle GET
+    return {
+        'statusCode': 200,
+        'headers': headers,
+        'body': json.dumps({
             'status': 'healthy',
             'version': '2.1.0',
             'demo_mode': True
-        }
-        self.wfile.write(json.dumps(response).encode())
-    
-    def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.end_headers()
+        })
+    }
+
+# Backwards compatibility
+handler = Handler

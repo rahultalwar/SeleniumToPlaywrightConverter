@@ -1,5 +1,4 @@
 import json
-from http.server import BaseHTTPRequestHandler
 
 def get_mock_conversion(java_code: str) -> str:
     return '''import { test, expect } from '@playwright/test';
@@ -14,53 +13,66 @@ test('converted test', async ({ page }) => {
 
 // NOTE: DEMO conversion. Add API key for real conversions.'''
 
-class handler(BaseHTTPRequestHandler):
-    def do_POST(self):
-        content_length = int(self.headers.get('Content-Length', 0))
-        body = self.rfile.read(content_length)
+def Handler(request):
+    """Vercel Python Serverless Function Handler"""
+    headers = {
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type'
+    }
+    
+    # Handle OPTIONS (CORS preflight)
+    if request.get('method') == 'OPTIONS':
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({'message': 'OK'})
+        }
+    
+    # Handle POST
+    try:
+        body_str = request.get('body', '{}')
+        if isinstance(body_str, str):
+            body = json.loads(body_str)
+        else:
+            body = body_str
         
-        try:
-            data = json.loads(body)
-            java_code = data.get('java_source_code', '')
-            
-            if not java_code:
-                self.send_response(400)
-                self.send_header('Content-Type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin', '*')
-                self.end_headers()
-                self.wfile.write(json.dumps({
+        java_code = body.get('java_source_code', '')
+        
+        if not java_code:
+            return {
+                'statusCode': 400,
+                'headers': headers,
+                'body': json.dumps({
                     'playwright_code': '',
                     'status': 'error',
                     'error_message': 'No Java code provided'
-                }).encode())
-                return
-            
-            result = get_mock_conversion(java_code)
-            
-            self.send_response(200)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps({
+                })
+            }
+        
+        result = get_mock_conversion(java_code)
+        
+        return {
+            'statusCode': 200,
+            'headers': headers,
+            'body': json.dumps({
                 'playwright_code': result,
                 'status': 'success',
                 'error_message': None
-            }).encode())
-            
-        except Exception as e:
-            self.send_response(500)
-            self.send_header('Content-Type', 'application/json')
-            self.send_header('Access-Control-Allow-Origin', '*')
-            self.end_headers()
-            self.wfile.write(json.dumps({
+            })
+        }
+        
+    except Exception as e:
+        return {
+            'statusCode': 500,
+            'headers': headers,
+            'body': json.dumps({
                 'playwright_code': '',
                 'status': 'error',
                 'error_message': str(e)
-            }).encode())
-    
-    def do_OPTIONS(self):
-        self.send_response(200)
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'POST, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-        self.end_headers()
+            })
+        }
+
+# Backwards compatibility
+handler = Handler
