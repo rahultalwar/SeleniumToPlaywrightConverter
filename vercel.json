@@ -15,7 +15,7 @@
     },
     {
       "source": "/(.*)",
-      "dest": "/public/$1"
+      "destination": "/public/$1"
     }
   ],
   "headers": [

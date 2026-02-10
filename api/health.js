@@ -1,6 +1,3 @@
-// Node.js Serverless Function - GET /health
-// Health check endpoint
-
 module.exports = (req, res) => {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -9,17 +6,15 @@ module.exports = (req, res) => {
 
   // Handle preflight
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+    return res.status(200).end();
   }
 
   // Only allow GET
   if (req.method !== 'GET') {
-    res.status(405).json({ error: 'Method not allowed' });
-    return;
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  res.status(200).json({
+  return res.status(200).json({
     status: 'healthy',
     version: '2.1.0',
     demo_mode: true
